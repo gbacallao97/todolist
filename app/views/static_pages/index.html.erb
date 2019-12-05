@@ -16,11 +16,9 @@
 
 <script>
   $(function() {
-    $('#new-form').submit(function(event) {
-      event.preventDefault();
-      var textbook = $('.new-todo');
-      console.log("Task: ", textbook.val());
-    });
+
+
+
     // The taskHtml method takes in a JavaScript representation
     // of the task and produces an HTML representation using
     // <li> tags
@@ -36,7 +34,7 @@
       return liElement;
     }
 
-    // toggleTask takes in an HTML representation of
+    // toggleTask takes in an HTML representation of the
     // an event that fires from an HTML representation of
     // the toggle checkbox and  performs an API request to toggle
     // the value of the `done` field
@@ -65,5 +63,22 @@
       $('.toggle').change(toggleTask);
 
     });
+
+    $('#new-form').submit(function(event) {
+      event.preventDefault();
+      var textbox = $('.new-todo');
+      var payload = {
+        task: {
+          title: textbox.val()
+        }
+      };
+      $.post("/tasks", payload).success(function(data) {
+        var htmlString = taskHtml(data);
+        var ulTodos = $('.todo-list');
+        ulTodos.append(htmlString);
+        $('.toggle').click(toggleTask);
+      });
+    });
+
   });
 </script>
